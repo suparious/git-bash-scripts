@@ -27,7 +27,7 @@ if [ -z "${SERVER_PREFIX}" ]; then
 fi
 
 if [ -z "${NODE_COUNT}" ]; then
-  echo "ERR: No NODE_COUNT specified, using defaults"
+  echo "WARN: No NODE_COUNT specified, using defaults"
   NODE_COUNT="6"
 fi
 
