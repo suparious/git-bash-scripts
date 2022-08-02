@@ -1,13 +1,19 @@
 #!/bin/bash
 
 COMMAND=$1
-RUN_USER=$2
-SERVER_PREFIX=$3
-NODE_COUNT=$4
+MODE=$2
+RUN_USER=$3
+SERVER_PREFIX=$4
+NODE_COUNT=$5
 
 if [ -z "${COMMAND}" ]; then
   echo "ERR: No command specified"
   exit 100
+fi
+
+if [ -z "${MODE}" ]; then
+  echo "WARN: No MODE specified, using defaults"
+  MODE="batch"
 fi
 
 if [ -z "${RUN_USER}" ]; then
@@ -25,7 +31,17 @@ if [ -z "${NODE_COUNT}" ]; then
   NODE_COUNT="6"
 fi
 
-for node in $(seq ${NODE_COUNT}); do
-  echo "Configuring ${SERVER_PREFIX}-${node}..."
-  ssh -tq ${RUN_USER}@${SERVER_PREFIX}-${node} "${COMMAND}"
-done
+case ${MODE} in
+blast)
+  for node in $(seq ${NODE_COUNT}); do
+    echo "Configuring ${SERVER_PREFIX}-${node}..."
+    ssh -tq ${RUN_USER}@${SERVER_PREFIX}-${node} "${COMMAND}" &
+  done
+;;
+*)
+  for node in $(seq ${NODE_COUNT}); do
+    echo "Configuring ${SERVER_PREFIX}-${node}..."
+    ssh -tq ${RUN_USER}@${SERVER_PREFIX}-${node} "${COMMAND}"
+  done
+;;
+esac
