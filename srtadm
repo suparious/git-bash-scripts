@@ -1,0 +1,31 @@
+#!/bin/bash
+
+COMMAND=$1
+RUN_USER=$2
+SERVER_PREFIX=$3
+NODE_COUNT=$4
+
+if [ -z "${COMMAND}" ]; then
+  echo "ERR: No command specified"
+  exit 100
+fi
+
+if [ -z "${RUN_USER}" ]; then
+  echo "WARN: No RUN_USER specified, using defaults"
+  RUN_USER="suparious"
+fi
+
+if [ -z "${SERVER_PREFIX}" ]; then
+  echo "WARN: No SERVER_PREFIX specified, using defaults"
+  SERVER_PREFIX="lab"
+fi
+
+if [ -z "${NODE_COUNT}" ]; then
+  echo "ERR: No NODE_COUNT specified, using defaults"
+  NODE_COUNT="6"
+fi
+
+for node in $(seq ${NODE_COUNT}); do
+  echo "Configuring ${SERVER_PREFIX}-${node}..."
+  ssh -tq ${RUN_USER}@${SERVER_PREFIX}-${node} "${COMMAND}"
+done
