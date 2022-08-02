@@ -7,8 +7,8 @@ SERVER_PREFIX=$4
 NODE_COUNT=$5
 
 if [ -z "${COMMAND}" ]; then
-  echo "ERR: No command specified"
-  exit 100
+  echo "WARN: No command specified, using defaults"
+  COMMAND="date"
 fi
 
 if [ -z "${MODE}" ]; then
